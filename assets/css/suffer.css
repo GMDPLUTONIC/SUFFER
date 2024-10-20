@@ -10,6 +10,10 @@ body {
     background-color: black;
 }
 
+h1, p {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
 /* Floating button styles */
 .floating-button {
     position: fixed;
@@ -23,10 +27,10 @@ body {
     padding: 15px;
     font-size: 18px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    user-select: none; /* Prevent text selection during drag */
-    height: 150px;
-    width: 150px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0);
+    user-select: none;
+    height: 125px;
+    width: 125px;
 }
 
 .floating-button:disabled {
