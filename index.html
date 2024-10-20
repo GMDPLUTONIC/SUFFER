@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUFFER 4K Screen Recorder</title>
+    <title>Simple Recorder Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,17 +16,9 @@
             background-color: black;
         }
         .controls {
-            position: relative;
-            display: inline-block;
+            margin-top: 20px;
         }
-        .overlay-buttons {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-        }
-        .overlay-buttons button {
+        button {
             font-size: 18px;
             padding: 10px 20px;
             margin: 5px;
@@ -36,28 +28,73 @@
             color: white;
             cursor: pointer;
         }
-        .overlay-buttons button:disabled {
+        button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
-        }
-        @media only screen and (max-width: 600px) {
-            .overlay-buttons button {
-                font-size: 16px;
-                padding: 8px 16px;
-            }
         }
     </style>
 </head>
 <body>
-    <h1>SUFFER 4K Screen Recorder</h1>
-    <p>SUFFER Is A 4K Screen Recorder Made By <a href="https://github.com/GMDPLUTONIC">GMDPLUTONIc</a></p>
+    <h1>Simple Recorder Test</h1>
+    <video id="preview" controls autoplay></video>
     <div class="controls">
-        <video id="preview" controls autoplay></video>
-        <div class="overlay-buttons">
-            <button id="startRecord">Start Recording</button>
-            <button id="stopRecord" disabled>Stop Recording</button>
-        </div>
+        <button id="startRecord">Start Recording</button>
+        <button id="stopRecord">Stop Recording</button>
     </div>
-    <script src="suffer.js"></script>
 </body>
+<script>
+let mediaRecorder;
+let recordedChunks = [];
+
+const startRecordingButton = document.getElementById('startRecord');
+const stopRecordingButton = document.getElementById('stopRecord');
+const videoPreview = document.getElementById('preview');
+
+startRecordingButton.addEventListener('click', async () => {
+    try {
+        // Capture screen
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: { mediaSource: 'screen', width: 3840, height: 2160 } // 4K resolution
+        });
+
+        videoPreview.srcObject = stream;
+
+        // Setup MediaRecorder
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4; codecs=vp9' });
+        recordedChunks = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recording.mp4';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+
+        mediaRecorder.start();
+        startRecordingButton.disabled = true;
+        stopRecordingButton.disabled = false;
+
+    } catch (err) {
+        console.error('Error accessing display media: ', err);
+    }
+});
+
+stopRecordingButton.addEventListener('click', () => {
+    mediaRecorder.stop();
+    startRecordingButton.disabled = false;
+    stopRecordingButton.disabled = true;
+});
+
+</script>
 </html>
