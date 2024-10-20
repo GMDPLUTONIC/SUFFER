@@ -1,17 +1,20 @@
 let mediaRecorder;
 let recordedChunks = [];
-let isRecording = false; // State to track recording status
+let isRecording = false; // Track recording status
 
 const toggleRecordingButton = document.getElementById('toggleRecord');
 const videoPreview = document.getElementById('preview');
 
-// Toggle recording function
+// Enable dragging functionality for the start/stop button
+dragElement(toggleRecordingButton);
+
+// Function to toggle recording on/off
 toggleRecordingButton.addEventListener('click', async () => {
     if (!isRecording) {
         // Start recording
         try {
             const stream = await navigator.mediaDevices.getDisplayMedia({
-                video: { mediaSource: 'screen', width: 3840, height: 2160 } 
+                video: { mediaSource: 'screen', width: 3840, height: 2160 }
             });
 
             videoPreview.srcObject = stream;
@@ -66,3 +69,57 @@ toggleRecordingButton.addEventListener('click', async () => {
         isRecording = false;
     }
 });
+
+// Make the button draggable
+function dragElement(elmnt) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    elmnt.onmousedown = dragMouseDown;
+    elmnt.ontouchstart = dragMouseDown; // Mobile support
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // Get the mouse cursor position at startup
+        if (e.type === 'touchstart') {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+
+        document.onmouseup = closeDragElement;
+        document.ontouchend = closeDragElement; // Mobile support
+        document.onmousemove = elementDrag;
+        document.ontouchmove = elementDrag; // Mobile support
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // Calculate the new cursor position
+        if (e.type === 'touchmove') {
+            pos1 = pos3 - e.touches[0].clientX;
+            pos2 = pos4 - e.touches[0].clientY;
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+        // Set the element's new position
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        // Stop moving when mouse or touch is released
+        document.onmouseup = null;
+        document.ontouchend = null;
+        document.onmousemove = null;
+        document.ontouchmove = null;
+    }
+}

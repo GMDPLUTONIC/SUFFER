@@ -24,6 +24,9 @@ body {
     font-size: 18px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    user-select: none; /* Prevent text selection during drag */
+    height: 150px;
+    width: 150px;
 }
 
 .floating-button:disabled {
