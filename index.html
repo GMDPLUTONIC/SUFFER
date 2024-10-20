@@ -40,7 +40,10 @@
     <video id="preview" controls autoplay></video>
     <div class="controls">
         <button id="startRecord">Start Recording</button>
-    </div>
+    </div><hr>
+
+    <h1>Quick Note:</h1>
+    <p>This Screen Recorder Doesn't Go Well With Recording Some Games And Will Get Laggy</p>
 </body>
 <script>
 let mediaRecorder;
@@ -58,7 +61,7 @@ startRecordingButton.addEventListener('click', async () => {
 
         videoPreview.srcObject = stream;
 
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4; codecs=vp9' });
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
         recordedChunks = [];
 
         mediaRecorder.ondataavailable = (event) => {
@@ -68,12 +71,12 @@ startRecordingButton.addEventListener('click', async () => {
         };
 
         mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'recording.mp4';
+            a.download = 'recording.webm';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
