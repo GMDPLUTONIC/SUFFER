@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUFFER 4K Screen Recorder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #preview {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            background-color: black;
+        }
+        .controls {
+            position: relative;
+            display: inline-block;
+        }
+        .overlay-buttons {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        .overlay-buttons button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .overlay-buttons button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        @media only screen and (max-width: 600px) {
+            .overlay-buttons button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>SUFFER 4K Screen Recorder</h1>
+    <p>SUFFER Is A 4K Screen Recorder Made By <a href="https://github.com/GMDPLUTONIC">GMDPLUTONIc</a></p>
+    <div class="controls">
+        <video id="preview" controls autoplay></video>
+        <div class="overlay-buttons">
+            <button id="startRecord">Start Recording</button>
+            <button id="stopRecord" disabled>Stop Recording</button>
+        </div>
+    </div>
+    <script src="suffer.js"></script>
+</body>
+</html>
