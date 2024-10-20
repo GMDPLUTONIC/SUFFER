@@ -36,10 +36,10 @@
 </head>
 <body>
     <h1>SUFFER 4K RESOLUTION RECORDER</h1>
+    <p>SUFFER Is A 4K Resolution Screen Recorder Made By <a href="https:/github.com/GMDPLUTONIC">GMDPLUTONIC</a></p>
     <video id="preview" controls autoplay></video>
     <div class="controls">
         <button id="startRecord">Start Recording</button>
-        <button id="stopRecord">Stop Recording</button>
     </div>
 </body>
 <script>
@@ -52,14 +52,12 @@ const videoPreview = document.getElementById('preview');
 
 startRecordingButton.addEventListener('click', async () => {
     try {
-        // Capture screen
         const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { mediaSource: 'screen', width: 3840, height: 2160 } // 4K resolution
+            video: { mediaSource: 'screen', width: 3840, height: 2160 } 
         });
 
         videoPreview.srcObject = stream;
 
-        // Setup MediaRecorder
         mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
         recordedChunks = [];
 
@@ -83,17 +81,10 @@ startRecordingButton.addEventListener('click', async () => {
 
         mediaRecorder.start();
         startRecordingButton.disabled = true;
-        stopRecordingButton.disabled = false;
 
     } catch (err) {
         console.error('Error accessing display media: ', err);
     }
-});
-
-stopRecordingButton.addEventListener('click', () => {
-    mediaRecorder.stop();
-    startRecordingButton.disabled = false;
-    stopRecordingButton.disabled = true;
 });
 
 </script>
