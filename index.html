@@ -80,7 +80,7 @@ startRecordingButton.addEventListener('click', async () => {
         };
 
         mediaRecorder.start();
-        startRecordingButton.disabled = true;
+        startRecordingButton.disabled = false;
 
     } catch (err) {
         console.error('Error accessing display media: ', err);
