@@ -4,91 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUFFER 4K RECORDER</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #preview {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            background-color: black;
-        }
-        .controls {
-            margin-top: 20px;
-        }
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="icon" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="assets/css/suffer.css">
 </head>
 <body>
     <h1>SUFFER 4K RESOLUTION RECORDER</h1>
+
+    <img src="assets/images/image.png" style="height: 275px; width: 550px;">
+
     <p>SUFFER Is A 4K Resolution Screen Recorder Made By <a href="https:/github.com/GMDPLUTONIC">GMDPLUTONIC</a></p>
     <video id="preview" controls autoplay></video>
-    <div class="controls">
-        <button id="startRecord">Start Recording</button>
-    </div><hr>
+
+    <!-- Floating start/stop button -->
+    <button id="toggleRecord" class="floating-button">Start Recording</button>
+    <hr>
+
 
     <h1>Quick Note:</h1>
     <p>This Screen Recorder Doesn't Go Well With Recording Some Games And Will Get Laggy</p>
+
+        <script src="assets/js/new.js"></script>
+
 </body>
-<script>
-let mediaRecorder;
-let recordedChunks = [];
-
-const startRecordingButton = document.getElementById('startRecord');
-const stopRecordingButton = document.getElementById('stopRecord');
-const videoPreview = document.getElementById('preview');
-
-startRecordingButton.addEventListener('click', async () => {
-    try {
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { mediaSource: 'screen', width: 3840, height: 2160 } 
-        });
-
-        videoPreview.srcObject = stream;
-
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
-        recordedChunks = [];
-
-        mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-            }
-        };
-
-        mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'recording.webm';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        };
-
-        mediaRecorder.start();
-        startRecordingButton.disabled = false;
-
-    } catch (err) {
-        console.error('Error accessing display media: ', err);
-    }
-});
-
-</script>
 </html>
